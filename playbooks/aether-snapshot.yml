@@ -1,0 +1,18 @@
+---
+- name: Local Workstation Snapper Snapshot Management
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Create pre-maintenance Snapper root snapshot
+      ansible.builtin.shell:
+        cmd: snapper -c root create --type single --description "ansible-pre-maintenance-$(date +%Y%m%d-%H%M%S)" --cleanup-algorithm number
+      check_mode: false
+      register: snapper_out
+      changed_when: snapper_out.rc == 0
+
+    - name: Display snapshot creation result
+      ansible.builtin.debug:
+        msg: "Snapper snapshot successfully created on aether."
