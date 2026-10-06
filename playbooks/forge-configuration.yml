@@ -1,0 +1,19 @@
+---
+- name: Forge Configuration Management
+  hosts: forge
+  gather_facts: true
+
+  tasks:
+    - name: Display system identity
+      ansible.builtin.debug:
+        msg:
+          - "Hostname: {{ ansible_facts['hostname'] }}"
+          - "OS: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}"
+          - "Kernel: {{ ansible_facts['kernel'] }}"
+          - "Architecture: {{ ansible_facts['architecture'] }}"
+
+    - name: Ensure managed operations directory exists
+      ansible.builtin.file:
+        path: /opt/devops-managed
+        state: directory
+        mode: "0755"
