@@ -33,3 +33,17 @@
         name: firewalld
         enabled: true
         state: started
+
+    - name: Allow SSH and HTTP through firewalld
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      loop:
+        - ssh
+        - http
+
+    - name: Display active SELinux enforcement status
+      ansible.builtin.debug:
+        msg: "SELinux Status: {{ ansible_facts['selinux']['status'] | default('Disabled/Not Installed') }} (Mode: {{ ansible_facts['selinux']['mode'] | default('N/A') }})"
