@@ -1,0 +1,14 @@
+---
+- name: Aether Command Operations
+  hosts: aether
+  gather_facts: false
+
+  tasks:
+    - name: Read hostname
+      ansible.builtin.command:
+        cmd: hostnamectl --static
+      register: hostname_result
+
+    - name: Display hostname
+      ansible.builtin.debug:
+        msg: "Aether hostname: {{ hostname_result.stdout }}"
