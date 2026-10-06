@@ -2,6 +2,7 @@
 - name: Forge Configuration Management
   hosts: forge
   gather_facts: true
+  become: true
 
   tasks:
     - name: Display system identity
@@ -17,3 +18,18 @@
         path: /opt/devops-managed
         state: directory
         mode: "0755"
+
+    - name: Install core system management packages
+      ansible.builtin.dnf:
+        name:
+          - tar
+          - rsync
+          - curl
+          - firewalld
+        state: present
+
+    - name: Ensure firewalld service is enabled and started
+      ansible.builtin.systemd:
+        name: firewalld
+        enabled: true
+        state: started
