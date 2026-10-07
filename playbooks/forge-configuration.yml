@@ -41,3 +41,17 @@
     - name: Display active SELinux enforcement status
       ansible.builtin.debug:
         msg: "SELinux Status: {{ ansible_facts['selinux']['status'] | default('Disabled/Not Installed') }} (Mode: {{ ansible_facts['selinux']['mode'] | default('N/A') }})"
+
+    - name: Deploy managed operations banner
+      ansible.builtin.template:
+        src: ../templates/operations-banner.j2
+        dest: /etc/operations-banner
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Report operations banner update
+
+  handlers:
+    - name: Report operations banner update
+      ansible.builtin.debug:
+        msg: "Operations banner configuration changed on {{ inventory_hostname }}"
