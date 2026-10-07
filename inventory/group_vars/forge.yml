@@ -4,9 +4,15 @@ forge_core_packages:
   - rsync
   - curl
   - firewalld
+  - nfs-utils
 
 forge_firewall_services:
   - ssh
   - http
+  - nfs
+  - rpc-bind
+  - mountd
 
 forge_managed_directory: /opt/devops-managed
+forge_nfs_export: /srv/shared-services
+forge_nfs_clients: 192.168.1.0/24

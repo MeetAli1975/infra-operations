@@ -1,0 +1,19 @@
+---
+- name: Aether NFS Client Configuration
+  hosts: aether
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Ensure NFS client utilities are installed
+      ansible.builtin.package:
+        name: nfs-utils
+        state: present
+
+    - name: Ensure Forge NFS export is persistently mounted
+      ansible.posix.mount:
+        src: "{{ aether_nfs_server }}:{{ aether_nfs_export }}"
+        path: "{{ aether_nfs_mount }}"
+        fstype: nfs
+        opts: defaults,_netdev
+        state: mounted

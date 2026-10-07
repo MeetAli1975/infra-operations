@@ -1,0 +1,4 @@
+---
+aether_nfs_server: 192.168.1.202
+aether_nfs_export: /srv/shared-services
+aether_nfs_mount: /mnt/shared-services

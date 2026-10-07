@@ -29,8 +29,14 @@
         name: firewalld
         enabled: true
         state: started
+    - name: Ensure NFS server is enabled and started
+      ansible.builtin.systemd:
+        name: nfs-server
+        enabled: true
+        state: started
 
-    - name: Allow SSH and HTTP through firewalld
+
+    - name: Allow managed services through firewalld
       ansible.posix.firewalld:
         service: "{{ item }}"
         permanent: true
@@ -51,7 +57,28 @@
         mode: "0644"
       notify: Report operations banner update
 
+    - name: Ensure NFS export directory exists
+      ansible.builtin.file:
+        path: "{{ forge_nfs_export }}"
+        state: directory
+        owner: alikhan
+        group: alikhan
+        mode: "0755"
+
+    - name: Deploy NFS exports configuration
+      ansible.builtin.template:
+        src: ../templates/exports.j2
+        dest: /etc/exports
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Reload NFS exports
+
   handlers:
     - name: Report operations banner update
       ansible.builtin.debug:
         msg: "Operations banner configuration changed on {{ inventory_hostname }}"
+
+    - name: Reload NFS exports
+      ansible.builtin.command:
+        cmd: exportfs -ra
