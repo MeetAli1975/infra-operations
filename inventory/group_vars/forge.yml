@@ -1,0 +1,12 @@
+---
+forge_core_packages:
+  - tar
+  - rsync
+  - curl
+  - firewalld
+
+forge_firewall_services:
+  - ssh
+  - http
+
+forge_managed_directory: /opt/devops-managed

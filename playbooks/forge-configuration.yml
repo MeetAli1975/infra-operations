@@ -15,17 +15,13 @@
 
     - name: Ensure managed operations directory exists
       ansible.builtin.file:
-        path: /opt/devops-managed
+        path: "{{ forge_managed_directory }}"
         state: directory
         mode: "0755"
 
     - name: Install core system management packages
       ansible.builtin.dnf:
-        name:
-          - tar
-          - rsync
-          - curl
-          - firewalld
+        name: "{{ forge_core_packages }}"
         state: present
 
     - name: Ensure firewalld service is enabled and started
@@ -40,9 +36,7 @@
         permanent: true
         state: enabled
         immediate: true
-      loop:
-        - ssh
-        - http
+      loop: "{{ forge_firewall_services }}"
 
     - name: Display active SELinux enforcement status
       ansible.builtin.debug:
