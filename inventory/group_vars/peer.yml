@@ -1,0 +1,6 @@
+---
+peer_nfs_server: 192.168.1.202
+peer_nfs_export: /srv/shared-services
+peer_nfs_mount: /mnt/shared-services
+peer_nfs_fstype: nfs4
+peer_nfs_options: defaults,_netdev

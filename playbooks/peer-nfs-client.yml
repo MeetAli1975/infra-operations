@@ -1,0 +1,19 @@
+---
+- name: Peer NFS Client Configuration
+  hosts: peer
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Ensure NFS client utilities are installed
+      ansible.builtin.package:
+        name: nfs-utils
+        state: present
+
+    - name: Ensure Forge NFS export is persistently mounted
+      ansible.posix.mount:
+        src: "{{ peer_nfs_server }}:{{ peer_nfs_export }}"
+        path: "{{ peer_nfs_mount }}"
+        fstype: "{{ peer_nfs_fstype }}"
+        opts: "{{ peer_nfs_options }}"
+        state: mounted
